@@ -22,6 +22,8 @@ user clicks answer
 repeats till all questions asked
 at end show stats ask to play agian
 */
+const QLOC = "#questionBox";
+const ANSCLASS = "panel panel-default col-md-6 answer"
 var orderShuffle = function() {
         this.choices = [];
         let answers = this.answer.slice(0);
@@ -75,6 +77,19 @@ var game = {
 
     },
     buildQuestion: function(question) {
+        $(QLOC).html("");
+        let name = $("<h1>");
+        name.addClass("col-md-12 question");
+        name.text(question.question);
+        $(QLOC).append(name);
+        question.orderShuffle();
+        for (var i = 0; i < question.choices.length; i++) {
+            console.log(i)
+            let item = $("<div>");
+            item.addClass(ANSCLASS);
+            item.append($("<div>").addClass("panel-body").text(question.choices[i]));
+            $(QLOC).append(item);
+        }
 
     },
     end: function() {

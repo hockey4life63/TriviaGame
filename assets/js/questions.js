@@ -1,17 +1,17 @@
 var questionsList = [
-    ["quetion", ["answer", "answer", "answer", "answer", "answer", "answer", "answer", "answer"],
+    ["quetion1", ["answer", "answer", "answer", "answer", "answer", "answer", "answer", "answer"],
         "correct answers"
     ],
-    ["quetion", ["answer", "answer", "answer", "answer", "answer", "answer", "answer", "answer"],
+    ["quetion2", ["answer", "answer", "answer", "answer", "answer", "answer", "answer", "answer"],
         "correct answers"
     ],
-    ["quetion", ["answer", "answer", "answer", "answer", "answer", "answer", "answer", "answer"],
+    ["quetion3", ["answer", "answer", "answer", "answer", "answer", "answer", "answer", "answer"],
         "correct answers"
     ],
-    ["quetion", ["answer", "answer", "answer", "answer", "answer", "answer", "answer", "answer"],
+    ["quetion4", ["answer", "answer", "answer", "answer", "answer", "answer", "answer", "answer"],
         "correct answers"
     ],
-    ["quetion", ["answer", "answer", "answer", "answer", "answer", "answer", "answer", "answer"],
+    ["quetion5", ["answer", "answer", "answer", "answer", "answer", "answer", "answer", "answer"],
         "correct answers"
     ],
 ]
