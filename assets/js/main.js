@@ -23,7 +23,8 @@ repeats till all questions asked
 at end show stats ask to play agian
 */
 const QLOC = "#questionBox";
-const ANSCLASS = "panel panel-default col-md-6 answer"
+const ANSCLASS = "panel panel-default col-md-6 answer";
+const TIMELOC = "#timeCount";
 var orderShuffle = function() {
         this.choices = [];
         let answers = this.answer.slice(0);
@@ -60,17 +61,28 @@ function questionConstuct() {
         game.questions.push(item);
     }
 };
-var game = {
+let game = {
     timer: {
         start: function() {
+            $(TIMELOC).text(this.timerCount);
+            game.timer.timerID = setInterval(function() {
+                game.timer.timerCount--;
+                $(TIMELOC).text(game.timer.timerCount)
+                if (game.timer.timerCount === 0) {
+                    game.timer.stop();
+                    game.timeUp();
+                    game.timer.timerCount = 15;
+                };
+
+            }, 1000);
 
         },
         stop: function() {
-
+            clearInterval(this.timerID)
         },
         timerID: "",
         perQuestion: 15,
-        timerCount: this.perQuestion
+        timerCount: 15
 
     },
     startGame: function() {
@@ -83,12 +95,17 @@ var game = {
         name.text(question.question);
         $(QLOC).append(name);
         question.orderShuffle();
-        for (var i = 0; i < question.choices.length; i++) {
+        for (let i = 0; i < question.choices.length; i++) {
             console.log(i)
             let item = $("<div>");
             item.addClass(ANSCLASS);
+            item.attr("id", "answer" + i);
             item.append($("<div>").addClass("panel-body").text(question.choices[i]));
             $(QLOC).append(item);
+            let curAnswer = question.choices[i];
+            $("#answer" + i).on("click", function() {
+                game.answeredCheck(question, curAnswer);
+            });
         }
 
     },
@@ -98,11 +115,18 @@ var game = {
     timeUp: function() {
 
     },
-    answeredWrong: function(question, answer) {
-
+    answeredCheck: function(question, answer) {
+        if (question.correctAnswer === answer) {
+            this.correct(question);
+        } else {
+            this.wrong(question, answer);
+        }
     },
-    answeredRight: function(question, answer) {
-
+    wrong: function(question, answer) {
+        console.log("WRONG!!!! you chose " + answer + "correct answer is " + question.correctAnswer);
+    },
+    correct: function(question) {
+        console.log("Correct!");
     },
     makeQuestionOrder: function() {
 
@@ -111,5 +135,5 @@ var game = {
     avgTime: [],
     questionOrder: [],
     asked: 0,
-    correct: 0
+    correctAns: 0
 }
