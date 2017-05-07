@@ -23,7 +23,7 @@ repeats till all questions asked
 at end show stats ask to play agian
 */
 const QLOC = "#questionBox"; //main location for all 
-const ANSCLASS = "panel panel-default col-md-6 answer"; //basic class for the awnsers
+const ANSCLASS = "panel panel-default col-md-6 answer col-xs-12"; //basic class for the awnsers
 const TIMELOC = "#timeCount"; //location for time count down
 const NXTQ = 2; //time between qustions
 let orderShuffle = function() {
