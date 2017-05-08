@@ -24,8 +24,7 @@ at end show stats ask to play agian
 */
 const QLOC = "#questionBox"; //main location for all 
 const ANSCLASS = "panel panel-default col-md-6 answer col-xs-12"; //basic class for the awnsers
-const TIMELOC = "#timeCount"; //location for time count down
-const NXTQ = 2; //time between qustions
+const NXTQ = 5; //time between qustions
 let orderShuffle = function() {
         this.choices = [];
         let answers = this.answer.slice(0);
@@ -53,7 +52,6 @@ function questionObj(question, awnser, correctAnswer) {
     this.orderShuffle = orderShuffle;
     this.answeredRight = 0;
     this.asked = 0;
-    this.avgTime = [];
 }
 
 function questionConstuct() {
@@ -74,7 +72,14 @@ let game = {
                 $(loc).text(timeCount);
                 if (timeCount === 0) {
                     game.timer.stop();
-                    if (loc !== "#nextCountdown") game.timeUp();
+                    if (loc !== "#nextCountdown") {
+                        $("#mainBox").addClass("shrink");
+                        setTimeout(function() {
+                            $("#mainBox").removeClass("shrink");
+                            game.timeUp();
+                        }, 1000)
+                    }
+
                 };
 
             }, 1000);
@@ -89,9 +94,8 @@ let game = {
     }, // all off the timer functions
     startGame: function() {
         this.makeQuestionOrder();
-        this.questionCount = 0;
         let item = $("<div>");
-        item.addClass("panel-body");
+
         item.append($("<h1>").text("Welcome to my code triva game"));
         item.append($("<h2>").text("You will be asked " + this.questions.length + " questions"));
         item.append($("<h2>").text("You will have " + this.timer.perQuestion + " seconds to answer"));
@@ -99,14 +103,17 @@ let game = {
         item.append($("<button>").text("Start Game").attr("id", "startBtn"));
         $(QLOC).append(item);
         $("#startBtn").on("click", function() {
-            console.log("presses!")
-            game.buildQuestion(game.questions[game.questionOrder[game.questionCount]]);
-        })
+            $("#mainBox").addClass("shrink");
+            setTimeout(function() {
+                $("#mainBox").removeClass("shrink");
+                game.buildQuestion(game.questions[game.questionOrder[game.questionCount]]);
+            }, 1000)
+        });
 
     }, //builds a start screen with info based on some varabiles and sets up the start button
     buildQuestion: function(question) {
         if (this.questionCount == this.questions.length) {
-            console.log("YOUR DONE!!!");
+            this.end();
             return;
         } //if asked all questions cal gameEnd and return
         $(QLOC).html("");
@@ -127,37 +134,67 @@ let game = {
             });
         } //builds all the answers
         this.questionCount++;
-        this.timer.start(this.timer.perQuestion, "#timeCount"); //starts the timer
+        this.askedQue++
+            this.timer.start(this.timer.perQuestion, "#timeCount"); //starts the timer
 
     },
     end: function() {
+        $(QLOC).html("");
+        let item = $("<div>");
+        item.append($("<h1>").text("Game Over"));
+        item.append($("<h2>").text("You got asked a total of " + this.askedQue + " questions"));
+        item.append($("<h2>").text("and got " + this.correctAns + " correct"));
+        item.append($("<h2>").text("Thats " + Math.floor((this.correctAns / this.askedQue) * 100) + "% answered correctly"));
+        item.append($("<button>").text("Start Game").attr("id", "startBtn"));
+        this.makeQuestionOrder();
+        this.questionCount = 0;
+        this.correctAns = 0;
+        this.askedQue = 0;
+        $(QLOC).append(item);
+        $("#startBtn").on("click", function() {
+            $("#mainBox").addClass("shrink");
+            setTimeout(function() {
+                $("#mainBox").removeClass("shrink");
+                game.buildQuestion(game.questions[game.questionOrder[game.questionCount]]);
+            }, 1000)
+        });
 
     },
     timeUp: function() {
         $(QLOC).html("");
         let item = $("<div>");
-        item.addClass("panel-body");
         item.append($("<h1>").text("You ran out of time!"));
         item.append($("<h2>").text("You gotta be faster!"));
         item.append($("<h2>").html("Next question will appear in <span id ='nextCountdown'>10</span> seconds"));
         $(QLOC).append(item);
         this.timer.start(NXTQ, "#nextCountdown");
         setTimeout(function() {
-            game.buildQuestion(game.questions[game.questionOrder[game.questionCount]]);
+
+            $("#mainBox").addClass("shrink");
+            setTimeout(function() {
+                $("#mainBox").removeClass("shrink");
+                game.buildQuestion(game.questions[game.questionOrder[game.questionCount]]);
+            }, 1000)
         }, NXTQ * 1000)
 
     }, //if called if you run out of time on a question
     answeredCheck: function(question, answer) {
-        if (question.correctAnswer === answer) {
-            this.correct(question);
-        } else {
-            this.wrong(question, answer);
-        }
+        this.timer.stop();
+        $("#mainBox").addClass("shrink");
+        setTimeout(function() {
+            $("#mainBox").removeClass("shrink")
+        }, 1000)
+        setTimeout(function() {
+            if (question.correctAnswer === answer) {
+                game.correct(question);
+            } else {
+                game.wrong(question, answer);
+            }
+        }, 1000)
     }, //preforms a check on your answer vs correct answer
     wrong: function(question, answer) {
         $(QLOC).html("");
         let item = $("<div>");
-        item.addClass("panel-body");
         item.append($("<h1>").text("Sorry thats the wrong answer"));
         item.append($("<h2>").text("You chose " + answer));
         item.append($("<h2>").text("THe correct answer is " + question.correctAnswer));
@@ -165,31 +202,38 @@ let game = {
         $(QLOC).append(item);
         this.timer.start(NXTQ, "#nextCountdown");
         setTimeout(function() {
-            game.buildQuestion(game.questions[game.questionOrder[game.questionCount]]);
+            $("#mainBox").addClass("shrink");
+            setTimeout(function() {
+                $("#mainBox").removeClass("shrink");
+                game.buildQuestion(game.questions[game.questionOrder[game.questionCount]]);
+            }, 1000)
         }, NXTQ * 1000)
     }, //called if you answer wrong
     correct: function(question) {
         $(QLOC).html("");
+        this.correctAns++;
         let item = $("<div>");
-        item.addClass("panel-body");
+
         item.append($("<h1>").text("Thats Correct!!!"));
         item.append($("<h2>").html("Next question will appear in <span id ='nextCountdown'>10</span> seconds"));
         $(QLOC).append(item);
         this.timer.start(NXTQ, "#nextCountdown");
         setTimeout(function() {
-            game.buildQuestion(game.questions[game.questionOrder[game.questionCount]]);
+            $("#mainBox").addClass("shrink");
+            setTimeout(function() {
+                $("#mainBox").removeClass("shrink");
+                game.buildQuestion(game.questions[game.questionOrder[game.questionCount]]);
+            }, 1000)
         }, NXTQ * 1000)
     }, //called if you answer corect
     makeQuestionOrder: function() {
         this.questionOrder = [];
         let qList = [];
         for (var i = 0; i < this.questions.length; i++) {
-            console.log("qList = " + i);
             qList.push(i)
         }
         let listLength = qList.length;
         for (var i = 0; i < listLength; i++) {
-            console.log("new loop i = " + i)
             let rand = Math.floor(Math.random() * qList.length);
             this.questionOrder.push(qList[rand]);
             qList.splice(rand, 1);
@@ -198,7 +242,6 @@ let game = {
 
     }, //makes a random order to call the questions
     questions: [],
-    avgTime: [],
     questionOrder: [],
     questionCount: 0,
     askedQue: 0,

@@ -1,0 +1,11 @@
+#mainBox {
+    transition: all 1000ms;
+}
+
+#mainPanel {
+    min-height: 310px;
+}
+
+.shrink {
+    transform: scale3d(0, 0, 1);
+}
