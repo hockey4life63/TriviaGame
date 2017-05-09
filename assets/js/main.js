@@ -24,7 +24,8 @@ at end show stats ask to play agian
 */
 const QLOC = "#questionBox"; //main location for all 
 const ANSCLASS = "panel panel-default col-md-6 answer col-xs-12"; //basic class for the awnsers
-const NXTQ = 5; //time between qustions
+const NXTQ = 3; //time between qustions
+const TDELAY = 500; // delay for spin animation
 let orderShuffle = function() {
         this.choices = [];
         let answers = this.answer.slice(0);
@@ -77,7 +78,7 @@ let game = {
                         setTimeout(function() {
                             $("#mainBox").removeClass("shrink");
                             game.timeUp();
-                        }, 1000)
+                        }, TDELAY)
                     }
 
                 };
@@ -92,22 +93,24 @@ let game = {
         perQuestion: 15
 
     }, // all off the timer functions
+    boxAnimation: function() {
+        $("#mainBox").addClass("shrink");
+        setTimeout(function() {
+            $("#mainBox").removeClass("shrink");
+            game.buildQuestion(game.questions[game.questionOrder[game.questionCount]]);
+        }, TDELAY)
+    },
     startGame: function() {
         this.makeQuestionOrder();
         let item = $("<div>");
-
-        item.append($("<h1>").text("Welcome to my code triva game"));
+        item.append($("<h1>").text("Welcome to my US history triva game"));
         item.append($("<h2>").text("You will be asked " + this.questions.length + " questions"));
         item.append($("<h2>").text("You will have " + this.timer.perQuestion + " seconds to answer"));
         item.append($("<h2>").text("The next question will appear after " + NXTQ + " seconds following a answer"));
         item.append($("<button>").text("Start Game").attr("id", "startBtn"));
         $(QLOC).append(item);
         $("#startBtn").on("click", function() {
-            $("#mainBox").addClass("shrink");
-            setTimeout(function() {
-                $("#mainBox").removeClass("shrink");
-                game.buildQuestion(game.questions[game.questionOrder[game.questionCount]]);
-            }, 1000)
+            game.boxAnimation();
         });
 
     }, //builds a start screen with info based on some varabiles and sets up the start button
@@ -152,11 +155,7 @@ let game = {
         this.askedQue = 0;
         $(QLOC).append(item);
         $("#startBtn").on("click", function() {
-            $("#mainBox").addClass("shrink");
-            setTimeout(function() {
-                $("#mainBox").removeClass("shrink");
-                game.buildQuestion(game.questions[game.questionOrder[game.questionCount]]);
-            }, 1000)
+            game.boxAnimation();
         });
 
     },
@@ -170,11 +169,7 @@ let game = {
         this.timer.start(NXTQ, "#nextCountdown");
         setTimeout(function() {
 
-            $("#mainBox").addClass("shrink");
-            setTimeout(function() {
-                $("#mainBox").removeClass("shrink");
-                game.buildQuestion(game.questions[game.questionOrder[game.questionCount]]);
-            }, 1000)
+            game.boxAnimation();
         }, NXTQ * 1000)
 
     }, //if called if you run out of time on a question
@@ -183,14 +178,14 @@ let game = {
         $("#mainBox").addClass("shrink");
         setTimeout(function() {
             $("#mainBox").removeClass("shrink")
-        }, 1000)
+        }, TDELAY)
         setTimeout(function() {
             if (question.correctAnswer === answer) {
                 game.correct(question);
             } else {
                 game.wrong(question, answer);
             }
-        }, 1000)
+        }, TDELAY)
     }, //preforms a check on your answer vs correct answer
     wrong: function(question, answer) {
         $(QLOC).html("");
@@ -202,11 +197,7 @@ let game = {
         $(QLOC).append(item);
         this.timer.start(NXTQ, "#nextCountdown");
         setTimeout(function() {
-            $("#mainBox").addClass("shrink");
-            setTimeout(function() {
-                $("#mainBox").removeClass("shrink");
-                game.buildQuestion(game.questions[game.questionOrder[game.questionCount]]);
-            }, 1000)
+            game.boxAnimation();
         }, NXTQ * 1000)
     }, //called if you answer wrong
     correct: function(question) {
@@ -219,11 +210,7 @@ let game = {
         $(QLOC).append(item);
         this.timer.start(NXTQ, "#nextCountdown");
         setTimeout(function() {
-            $("#mainBox").addClass("shrink");
-            setTimeout(function() {
-                $("#mainBox").removeClass("shrink");
-                game.buildQuestion(game.questions[game.questionOrder[game.questionCount]]);
-            }, 1000)
+            game.boxAnimation();
         }, NXTQ * 1000)
     }, //called if you answer corect
     makeQuestionOrder: function() {
