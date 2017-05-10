@@ -45,7 +45,7 @@ let orderShuffle = function() {
 
     } //pulls 3 random worong answers and the correct one and places in random order inside choices
 
-function questionObj(question, awnser, correctAnswer) {
+function questionObj(question, awnser, correctAnswer, img) {
     this.question = question;
     this.answer = awnser; //will be array of answers
     this.choices = [];
@@ -53,11 +53,12 @@ function questionObj(question, awnser, correctAnswer) {
     this.orderShuffle = orderShuffle;
     this.answeredRight = 0;
     this.asked = 0;
+    this.img = "url(assets/images/" + img + ")";
 }
 
 function questionConstuct() {
     for (let i = 0; i < questionsList.length; i++) {
-        let item = new questionObj(questionsList[i][0], questionsList[i][1], questionsList[i][2]);
+        let item = new questionObj(questionsList[i][0], questionsList[i][1], questionsList[i][2], img[i]);
         game.questions.push(item);
     }
 
@@ -119,6 +120,7 @@ let game = {
             this.end();
             return;
         } //if asked all questions cal gameEnd and return
+        $("body").css("background", question.img);
         $(QLOC).html("");
         let name = $("<h1>");
         name.addClass("col-md-12 question");
@@ -164,6 +166,7 @@ let game = {
         let item = $("<div>");
         item.append($("<h1>").text("You ran out of time!"));
         item.append($("<h2>").text("You gotta be faster!"));
+        item.append($("<h2>").text("The correct answer is " + game.questions[game.questionOrder[game.questionCount - 1]].correctAnswer));
         item.append($("<h2>").html("Next question will appear in <span id ='nextCountdown'>10</span> seconds"));
         $(QLOC).append(item);
         this.timer.start(NXTQ, "#nextCountdown");
@@ -192,7 +195,7 @@ let game = {
         let item = $("<div>");
         item.append($("<h1>").text("Sorry thats the wrong answer"));
         item.append($("<h2>").text("You chose " + answer));
-        item.append($("<h2>").text("THe correct answer is " + question.correctAnswer));
+        item.append($("<h2>").text("The correct answer is " + question.correctAnswer));
         item.append($("<h2>").html("Next question will appear in <span id ='nextCountdown'>10</span> seconds"));
         $(QLOC).append(item);
         this.timer.start(NXTQ, "#nextCountdown");
@@ -235,4 +238,6 @@ let game = {
     correctAns: 0
 }
 questionConstuct();
-game.startGame();
+$(document).ready(function() {
+    game.startGame();
+})
