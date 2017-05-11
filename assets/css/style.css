@@ -33,7 +33,7 @@ hr {
 #questionBox {}
 
 .shrink {
-    transform: scale3d(0, 0, 1) rotate(720deg);
+    transform: scale3d(0, 0, 1) rotate(360deg);
 }
 
 button {
