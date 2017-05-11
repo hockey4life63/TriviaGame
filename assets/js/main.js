@@ -1,24 +1,24 @@
 /*
 mainGAmeObj{
-	timer
-	buildQuestion(questionObj)
-	start and end screen
-	question answered right
-	avg time to answer question
+    timer
+    buildQuestion(questionObj)
+    start and end screen
+    question answered right
+    avg time to answer question
 }
 questions[]{
-	question string
-	answers(8)
-	correct answer
-	answer order shuffle
-	times answered wrong/right
-	avg time to awnser
+    question string
+    answers(8)
+    correct answer
+    answer order shuffle
+    times answered wrong/right
+    avg time to awnser
 }
 user starts game
 first question appears with a timer
 user clicks answer 
-	if correct tell user then move to next question;
-	else show correct question then to next question
+    if correct tell user then move to next question;
+    else show correct question then to next question
 repeats till all questions asked
 at end show stats ask to play agian
 */
@@ -105,6 +105,7 @@ let game = {
         this.makeQuestionOrder();
         let item = $("<div>");
         item.append($("<h1>").text("Welcome to my US history triva game"));
+        item.append($("<hr>"));
         item.append($("<h2>").text("You will be asked " + this.questions.length + " questions"));
         item.append($("<h2>").text("You will have " + this.timer.perQuestion + " seconds to answer"));
         item.append($("<h2>").text("The next question will appear after " + NXTQ + " seconds following a answer"));
@@ -125,6 +126,7 @@ let game = {
         let name = $("<h1>");
         name.addClass("col-md-12 question");
         name.text(question.question);
+        name.append($("<hr>"));
         $(QLOC).append(name);
         question.orderShuffle();
         for (let i = 0; i < question.choices.length; i++) {
@@ -147,6 +149,7 @@ let game = {
         $(QLOC).html("");
         let item = $("<div>");
         item.append($("<h1>").text("Game Over"));
+        item.append($("<hr>"));
         item.append($("<h2>").text("You got asked a total of " + this.askedQue + " questions"));
         item.append($("<h2>").text("and got " + this.correctAns + " correct"));
         item.append($("<h2>").text("Thats " + Math.floor((this.correctAns / this.askedQue) * 100) + "% answered correctly"));
@@ -165,6 +168,7 @@ let game = {
         $(QLOC).html("");
         let item = $("<div>");
         item.append($("<h1>").text("You ran out of time!"));
+        item.append($("<hr>"));
         item.append($("<h2>").text("You gotta be faster!"));
         item.append($("<h2>").text("The correct answer is " + game.questions[game.questionOrder[game.questionCount - 1]].correctAnswer));
         item.append($("<h2>").html("Next question will appear in <span id ='nextCountdown'>10</span> seconds"));
@@ -194,6 +198,7 @@ let game = {
         $(QLOC).html("");
         let item = $("<div>");
         item.append($("<h1>").text("Sorry thats the wrong answer"));
+        item.append($("<hr>"));
         item.append($("<h2>").text("You chose " + answer));
         item.append($("<h2>").text("The correct answer is " + question.correctAnswer));
         item.append($("<h2>").html("Next question will appear in <span id ='nextCountdown'>10</span> seconds"));
@@ -207,8 +212,8 @@ let game = {
         $(QLOC).html("");
         this.correctAns++;
         let item = $("<div>");
-
         item.append($("<h1>").text("Thats Correct!!!"));
+        item.append($("<hr>"));
         item.append($("<h2>").html("Next question will appear in <span id ='nextCountdown'>10</span> seconds"));
         $(QLOC).append(item);
         this.timer.start(NXTQ, "#nextCountdown");

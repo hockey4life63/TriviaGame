@@ -1,6 +1,7 @@
 body {
     background: url(../images/flag.gif) no-repeat center center;
     background-size: cover;
+    font-family: "Times New Roman", Times, serif;
 }
 
 #mainBox {
@@ -9,16 +10,49 @@ body {
 
 #mainPanel {
     min-height: 310px;
-    background-color: rgba(255, 255, 255, .5);
+    background-color: rgba(154, 151, 151, .95);
     color: black;
 }
 
+hr {
+    border-color: black;
+    border-width: 3px;
+}
+
+.answer {
+    background-color: rgb(154, 151, 151);
+    text-align: center;
+    border-color: black;
+    border-width: 2px;
+}
+
 #mainPanel h1 {
-    background: white;
+    font-size: 40px;
 }
 
 #questionBox {}
 
 .shrink {
     transform: scale3d(0, 0, 1) rotate(720deg);
+}
+
+button {
+    border: 0;
+    font-size: 27px;
+}
+
+.time {
+    background-color: rgba(154, 151, 151, .95);
+    color: black;
+    font-size: 20px;
+    text-align: center;
+}
+
+.time .panel-heading {
+    background-color: rgb(127, 124, 124);
+    color: black;
+}
+
+.panel-title {
+    font-size: 22px;
 }
