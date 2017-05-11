@@ -26,6 +26,16 @@ const QLOC = "#questionBox"; //main location for all
 const ANSCLASS = "panel panel-default col-md-6 answer col-xs-12"; //basic class for the awnsers
 const NXTQ = 3; //time between qustions
 const TDELAY = 500; // delay for spin animation
+function animationTest() {
+    $("#mainBox").addClass("moveTop");
+    setTimeout(function() {
+        $("#mainBox").addClass("transportTop");
+        $("#mainBox").removeClass("moveTop");
+        setTimeout(function() {
+            $("#mainBox").removeClass("transportTop");
+        }, 1000);
+    }, 1000);
+}
 let orderShuffle = function() {
         this.choices = [];
         let answers = this.answer.slice(0);
@@ -182,27 +192,35 @@ let game = {
     }, //if called if you run out of time on a question
     answeredCheck: function(question, answer) {
         this.timer.stop();
-        $("#mainBox").addClass("shrink");
-        setTimeout(function() {
-            $("#mainBox").removeClass("shrink")
-        }, TDELAY)
-        setTimeout(function() {
-            if (question.correctAnswer === answer) {
+        /* */
+        if (question.correctAnswer === answer) {
+            $("#mainBox").addClass("shrink");
+            setTimeout(function() {
+                $("#mainBox").removeClass("shrink")
+            }, TDELAY)
+            setTimeout(function() {
                 game.correct(question);
-            } else {
-                game.wrong(question, answer);
-            }
-        }, TDELAY)
+            }, TDELAY)
+        } else {
+            game.wrong(question, answer);
+        }
+        /*     
+         */
     }, //preforms a check on your answer vs correct answer
     wrong: function(question, answer) {
+        $(QLOC).slideUp();
         $(QLOC).html("");
-        let item = $("<div>");
-        item.append($("<h1>").text("Sorry thats the wrong answer"));
-        item.append($("<hr>"));
-        item.append($("<h2>").text("You chose " + answer));
-        item.append($("<h2>").text("The correct answer is " + question.correctAnswer));
-        item.append($("<h2>").html("Next question will appear in <span id ='nextCountdown'>10</span> seconds"));
-        $(QLOC).append(item);
+        setTimeout(function() {
+            let item = $("<div>");
+            item.append($("<h1>").text("Sorry thats the wrong answer"));
+            item.append($("<hr>"));
+            item.append($("<h2>").text("You chose " + answer));
+            item.append($("<h2>").text("The correct answer is " + question.correctAnswer));
+            item.append($("<h2>").html("Next question will appear in <span id ='nextCountdown'>10</span> seconds"));
+            $(QLOC).append(item);
+
+            $(QLOC).slideDown();
+        }, 1000);
         this.timer.start(NXTQ, "#nextCountdown");
         setTimeout(function() {
             game.boxAnimation();

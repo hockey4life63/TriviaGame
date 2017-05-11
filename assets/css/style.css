@@ -2,6 +2,7 @@ body {
     background: url(../images/flag.gif) no-repeat center center;
     background-size: cover;
     font-family: "Times New Roman", Times, serif;
+    overflow: hidden;
 }
 
 #mainBox {
@@ -9,7 +10,7 @@ body {
 }
 
 #mainPanel {
-    min-height: 310px;
+    /* min-height: 310px; */
     background-color: rgba(154, 151, 151, .95);
     color: black;
 }
@@ -55,4 +56,12 @@ button {
 
 .panel-title {
     font-size: 22px;
+}
+
+.moveDown {
+    top: 1000px;
+}
+
+.transportTop {
+    bottom: 1000px;
 }
