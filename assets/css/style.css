@@ -1,4 +1,7 @@
-body {}
+body {
+    background: url(../images/flag.gif) no-repeat center center;
+    background-size: cover;
+}
 
 #mainBox {
     transition: all 500ms;
@@ -6,6 +9,12 @@ body {}
 
 #mainPanel {
     min-height: 310px;
+    background-color: rgba(255, 255, 255, .5);
+    color: black;
+}
+
+#mainPanel h1 {
+    background: white;
 }
 
 #questionBox {}
