@@ -26,16 +26,6 @@ const QLOC = "#questionBox"; //main location for all
 const ANSCLASS = "panel panel-default col-md-6 answer col-xs-12"; //basic class for the awnsers
 const NXTQ = 3; //time between qustions
 const TDELAY = 500; // delay for spin animation
-function animationTest() {
-    $("#mainBox").addClass("moveTop");
-    setTimeout(function() {
-        $("#mainBox").addClass("transportTop");
-        $("#mainBox").removeClass("moveTop");
-        setTimeout(function() {
-            $("#mainBox").removeClass("transportTop");
-        }, 1000);
-    }, 1000);
-}
 let orderShuffle = function() {
         this.choices = [];
         let answers = this.answer.slice(0);
@@ -194,13 +184,7 @@ let game = {
         this.timer.stop();
         /* */
         if (question.correctAnswer === answer) {
-            $("#mainBox").addClass("shrink");
-            setTimeout(function() {
-                $("#mainBox").removeClass("shrink")
-            }, TDELAY)
-            setTimeout(function() {
-                game.correct(question);
-            }, TDELAY)
+            game.correct(question);
         } else {
             game.wrong(question, answer);
         }
@@ -208,9 +192,10 @@ let game = {
          */
     }, //preforms a check on your answer vs correct answer
     wrong: function(question, answer) {
-        $(QLOC).slideUp();
-        $(QLOC).html("");
+        $("#mainBox").css({ "margin-top": "100pc" });
+
         setTimeout(function() {
+            $(QLOC).html("");
             let item = $("<div>");
             item.append($("<h1>").text("Sorry thats the wrong answer"));
             item.append($("<hr>"));
@@ -219,7 +204,7 @@ let game = {
             item.append($("<h2>").html("Next question will appear in <span id ='nextCountdown'>10</span> seconds"));
             $(QLOC).append(item);
 
-            $(QLOC).slideDown();
+            $("#mainBox").css({ "margin-top": "0pc" });
         }, 1000);
         this.timer.start(NXTQ, "#nextCountdown");
         setTimeout(function() {
@@ -227,14 +212,18 @@ let game = {
         }, NXTQ * 1000)
     }, //called if you answer wrong
     correct: function(question) {
+        $(QLOC).slideUp();
         $(QLOC).html("");
         this.correctAns++;
-        let item = $("<div>");
-        item.append($("<h1>").text("Thats Correct!!!"));
-        item.append($("<hr>"));
-        item.append($("<h2>").html("Next question will appear in <span id ='nextCountdown'>10</span> seconds"));
-        $(QLOC).append(item);
-        this.timer.start(NXTQ, "#nextCountdown");
+        setTimeout(function() {
+            let item = $("<div>");
+            item.append($("<h1>").text("Thats Correct!!!"));
+            item.append($("<hr>"));
+            item.append($("<h2>").html("Next question will appear in <span id ='nextCountdown'>10</span> seconds"));
+            $(QLOC).append(item);
+            game.timer.start(NXTQ, "#nextCountdown");
+            $(QLOC).slideDown();
+        }, 1000)
         setTimeout(function() {
             game.boxAnimation();
         }, NXTQ * 1000)
